@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapshot Elegante</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-gold: #d4af37;
+            --color-gold-light: #e9d498;
+            --color-gold-dark: #a38728;
+            --color-black: #111111;
+            --color-dark: #222222;
+            --color-gray: #444444;
+            --color-light-gray: #f5f5f5;
+            --color-white: #ffffff;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-medium: 0 15px 35px rgba(0,0,0,0.12);
+            --shadow-hard: 0 20px 40px rgba(0,0,0,0.16);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-medium: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-fast: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-light-gray);
+            color: var(--color-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* DECORACIONES DE FONDO */
+        .background-decor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+            opacity: 0.15;
+        }
+
+        .decor-circle-1 {
+            width: 500px;
+            height: 500px;
+            top: -250px;
+            left: -150px;
+        }
+
+        .decor-circle-2 {
+            width: 600px;
+            height: 600px;
+            bottom: -300px;
+            right: -200px;
+        }
+
+        .decor-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+            height: 1px;
+            width: 80%;
+            left: 10%;
+        }
+
+        .decor-line-1 {
+            top: 15%;
+        }
+
+        .decor-line-2 {
+            top: 85%;
+        }
+
+        /* PÁGINA DE INICIO */
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--color-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .logo-text {
+            color: var(--color-white);
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: var(--font-heading);
+        }
+
+        .home-title {
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--color-black);
+            margin-bottom: 1rem;
+            font-family: var(--font-heading);
+            letter-spacing: 0.05em;
+        }
+
+        .home-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-gray);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 600px;
+        }
+
+        .enter-button {
+            background-color: var(--color-gold);
+            color: var(--color-white);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            border-radius: 50px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .enter-button:hover {
+            background-color: var(--color-gold-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* PÁGINA DE CATEGORÍAS */
+        .categories-page {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+
+        .categories-title {
+            font-size: 2.8rem;
+            font-weight: 400;
+            color: var(--color-black);
+            margin-bottom: 1rem;
+            font-family: var(--font-heading);
+        }
+
+        .categories-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-gray);
+            margin-bottom: 4rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .categories-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-medium);
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            transition: var(--transition-medium);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            border: 4px solid var(--color-white);
+        }
+
+        .category-circle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: var(--transition-medium);
+        }
+
+        .category:hover .category-circle::after {
+            opacity: 1;
+        }
+
+        .category-circle.familiar { background-color: var(--color-gold-light); }
+        .category-circle.personal { background-color: var(--color-light-gray); }
+        .category-circle.viajes { background-color: var(--color-gold); }
+        .category-circle.amigos { background-color: var(--color-gold-dark); }
+
+        .category-label {
+            font-size: 1rem;
+            color: var(--color-black);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* MENÚ DE CONFIGURACIÓN */
+        .config-menu {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .config-button {
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-gold);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            transition: var(--transition-medium);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .config-button:hover {
+            background-color: var(--color-gold-dark);
+            transform: rotate(90deg);
+        }
+
+        .config-line {
+            width: 20px;
+            height: 2px;
+            background-color: var(--color-white);
+            border-radius: 1px;
+        }
+
+        .config-dropdown {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: var(--shadow-hard);
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition-medium);
+        }
+
+        .config-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .config-option {
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: var(--transition-fast);
+            color: var(--color-dark);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .config-option:hover {
+            background-color: var(--color-light-gray);
+            color: var(--color-gold-dark);
+        }
+
+        .config-icon {
+            font-size: 1.2rem;
+            color: var(--color-gold);
+        }
+
+        /* GALERÍA */
+        .gallery-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .gallery-content {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .gallery-title {
+            color: var(--color-black);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: var(--font-heading);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .gallery-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--color-gold);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 15px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            border: 3px solid transparent;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .gallery-item.selected {
+            border-color: var(--color-gold);
+        }
+
+        .gallery-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .gallery-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-medium);
+            font-weight: 500;
+        }
+
+        .gallery-btn.primary {
+            background-color: var(--color-gold);
+            color: var(--color-white);
+        }
+
+        .gallery-btn.secondary {
+            background-color: var(--color-light-gray);
+            color: var(--color-dark);
+        }
+
+        .gallery-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .gallery-btn.primary:hover {
+            background-color: var(--color-gold-dark);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 3.5rem;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .modal-overlay:not(.hidden) .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-circle {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            margin: 0 auto 2.5rem;
+            background-size: cover;
+            background-position: center;
+            box-shadow: var(--shadow-medium);
+            border: 5px solid var(--color-white);
+            position: relative;
+        }
+
+        .modal-circle::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 50%;
+            border: 1px solid var(--color-gold);
+            opacity: 0.5;
+        }
+
+        .modal-quote {
+            font-size: 1.4rem;
+            color: var(--color-black);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-family: var(--font-heading);
+        }
+
+        .modal-author {
+            font-size: 1rem;
+            color: var(--color-gray);
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+
+        .modal-enter-btn {
+            background-color: var(--color-gold);
+            color: var(--color-white);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .modal-enter-btn:hover {
+            background-color: var(--color-gold-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background-color: var(--color-light-gray);
+            color: var(--color-black);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* PÁGINA DE GALERÍA DE FOTOS */
+        .gallery-page {
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            background-color: var(--color-light-gray);
+        }
+
+        .gallery-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .home-icon {
+            position: absolute;
+            left: 0;
+            background: var(--color-gold);
+            color: var(--color-white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .home-icon:hover {
+            background: var(--color-gold-dark);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .gallery-page-title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--color-black);
+            font-family: var(--font-heading);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .gallery-page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--color-gold);
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .add-photo-card {
+            aspect-ratio: 1;
+            border: 2px dashed var(--color-gold);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .add-photo-card:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: scale(1.02);
+        }
+
+        .add-photo-icon {
+            font-size: 2.5rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            transition: var(--transition-medium);
+        }
+
+        .add-photo-card:hover .add-photo-icon {
+            transform: rotate(90deg);
+        }
+
+        .add-photo-text {
+            color: var(--color-gray);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .photo-card {
+            aspect-ratio: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            position: relative;
+            background: var(--color-white);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: var(--color-white);
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: var(--transition-medium);
+        }
+
+        .photo-card:hover .photo-card-overlay {
+            transform: translateY(0);
+        }
+
+        .photo-card-date {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .photo-card-description {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Botón de eliminar en la tarjeta de foto */
+        .photo-card-delete {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #d32f2f;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-soft);
+            z-index: 10;
+        }
+
+        .photo-card:hover .photo-card-delete {
+            opacity: 1;
+        }
+
+        .photo-card-delete:hover {
+            background: #d32f2f;
+            color: var(--color-white);
+            transform: scale(1.1);
+        }
+
+        .gallery-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            background: var(--color-gold);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-medium);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--color-gold-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-btn:disabled {
+            background: var(--color-light-gray);
+            color: var(--color-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .page-info {
+            color: var(--color-gray);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* MODAL DE EDICIÓN DE FOTO */
+        .photo-edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .photo-edit-content {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .edit-title {
+            color: var(--color-black);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-family: var(--font-heading);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .edit-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--color-gold);
+        }
+
+        .edit-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .edit-photo-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-photo-preview img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .edit-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-field label {
+            color: var(--color-black);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .edit-input, .edit-textarea {
+            padding: 15px;
+            border: 2px solid var(--color-light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--color-white);
+            transition: var(--transition-medium);
+            font-family: var(--font-body);
+        }
+
+        .edit-input:focus, .edit-textarea:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .edit-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .edit-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .edit-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .edit-btn.cancel {
+            background: var(--color-light-gray);
+            color: var(--color-gray);
+        }
+
+        .edit-btn.save {
+            background: var(--color-gold);
+            color: var(--color-white);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .edit-btn.cancel:hover {
+            background: var(--color-gray);
+            color: var(--color-white);
+        }
+
+        .edit-btn.save:hover {
+            background: var(--color-gold-dark);
+        }
+
+        /* MODAL DE VISUALIZACIÓN DE FOTO */
+        .photo-view-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 4000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .photo-view-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .photo-view-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .close-photo-view {
+            position: absolute;
+            top: -60px;
+            right: -20px;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 1;
+            transition: var(--transition-fast);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-photo-view:hover {
+            background: rgba(255,255,255,0.1);
+            transform: rotate(90deg);
+        }
+
+        .photo-view-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 15px;
+            object-fit: contain;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .photo-info {
+            background: var(--color-white);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            text-align: center;
+            min-width: 350px;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .photo-date {
+            color: var(--color-black);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: var(--font-heading);
+        }
+
+        .photo-description {
+            color: var(--color-gray);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .photo-action-btn {
+            background: var(--color-light-gray);
+            color: var(--color-gray);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-medium);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .photo-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .photo-action-btn.delete {
+            background: rgba(211, 47, 47, 0.1);
+            color: #d32f2f;
+        }
+
+        .photo-action-btn.edit {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--color-gold-dark);
+        }
+
+        .photo-action-btn.share {
+            background: rgba(37, 211, 102, 0.1);
+            color: #25d366;
+        }
+
+        .photo-action-btn.delete:hover {
+            background: #d32f2f;
+            color: var(--color-white);
+        }
+
+        .photo-action-btn.edit:hover {
+            background: var(--color-gold);
+            color: var(--color-white);
+        }
+
+        .photo-action-btn.share:hover {
+            background: #25d366;
+            color: var(--color-white);
+        }
+
+        /* ANIMACIONES DE FLORES */
+        .flower-animation {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5000;
+            width: 100%;
+            height: 100%;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0;
+            animation: flowerBloom 4s ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+        }
+
+        .flower.top-left {
+            top: 40px;
+            left: 40px;
+            animation-delay: 0s;
+        }
+
+        .flower.top-right {
+            top: 40px;
+            right: 40px;
+            animation-delay: 0.7s;
+        }
+
+        .flower.bottom-left {
+            bottom: 40px;
+            left: 40px;
+            animation-delay: 1.4s;
+        }
+
+        .flower.bottom-right {
+            bottom: 40px;
+            right: 40px;
+            animation-delay: 2.1s;
+        }
+
+        @keyframes flowerBloom {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            20%, 70% {
+                opacity: 1;
+                transform: scale(1) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.8) rotate(360deg);
+            }
+        }
+
+        /* MODAL DE COMPARTIR */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 5000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .share-content {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .share-title {
+            color: var(--color-black);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-heading);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .share-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--color-gold);
+        }
+
+        .share-link-container {
+            background: var(--color-light-gray);
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--color-gray);
+            position: relative;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-medium);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .share-btn.whatsapp {
+            background: rgba(37, 211, 102, 0.1);
+            color: #25d366;
+        }
+
+        .share-btn.copy {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--color-gold-dark);
+        }
+
+        .share-btn.close {
+            background: var(--color-light-gray);
+            color: var(--color-gray);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .share-btn.whatsapp:hover {
+            background: #25d366;
+            color: var(--color-white);
+        }
+
+        .share-btn.copy:hover {
+            background: var(--color-gold);
+            color: var(--color-white);
+        }
+
+        .share-btn.close:hover {
+            background: var(--color-gray);
+            color: var(--color-white);
+        }
+
+        /* APARTADO LEGAL */
+        .legal-footer {
+            background: var(--color-white);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--color-gray);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+            margin-top: 4rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .legal-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--color-black);
+            font-family: var(--font-heading);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .legal-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--color-gold);
+        }
+
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .legal-content p {
+            margin-bottom: 1rem;
+        }
+
+        .legal-links {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .legal-link {
+            color: var(--color-gold-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-medium);
+            position: relative;
+        }
+
+        .legal-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-gold);
+            transition: var(--transition-medium);
+        }
+
+        .legal-link:hover {
+            color: var(--color-gold);
+        }
+
+        .legal-link:hover::after {
+            width: 100%;
+        }
+
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: var(--color-white);
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-hard);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification.success {
+            background-color: var(--color-gold);
+        }
+
+        .notification.error {
+            background-color: #d32f2f;
+        }
+
+        .notification.info {
+            background-color: #1976d2;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            font-size: 1.2rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .home-title {
+                font-size: 2.8rem;
+            }
+
+            .categories-title {
+                font-size: 2.2rem;
+            }
+
+            .categories-container {
+                gap: 2rem;
+            }
+
+            .category-circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            .decor-circle-1 { width: 300px; height: 300px; }
+            .decor-circle-2 { width: 400px; height: 400px; }
+
+            .legal-links {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .gallery-page-title {
+                font-size: 2rem;
+            }
+            
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .edit-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 200px;
+                justify-content: center;
+            }
+            
+            .photo-actions {
+                flex-direction: column;
+            }
+            
+            .photo-action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+            
+            .share-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-title {
+                font-size: 2.2rem;
+            }
+
+            .enter-button {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                padding: 2rem;
+            }
+            
+            .modal-circle {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .modal-quote {
+                font-size: 1.2rem;
+            }
+            
+            .photo-info {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decoraciones de fondo -->
+    <div class="background-decor">
+        <div class="decor-circle decor-circle-1"></div>
+        <div class="decor-circle decor-circle-2"></div>
+        <div class="decor-line decor-line-1"></div>
+        <div class="decor-line decor-line-2"></div>
+    </div>
+
+    <!-- PÁGINA DE INICIO -->
+    <div class="home-page" id="homePage">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <span class="logo-text">S</span>
+            </div>
+        </div>
+        <h1 class="home-title">Snapshot Elegante</h1>
+        <p class="home-subtitle">Tu álbum personal de fotografías con un toque de elegancia</p>
+        <button class="enter-button" onclick="goToCategories()">Explorar</button>
+    </div>
+
+    <!-- PÁGINA DE CATEGORÍAS -->
+    <div class="categories-page hidden" id="categoriesPage">
+        <h1 class="categories-title">Colecciones</h1>
+        <p class="categories-subtitle">Selecciona una colección para explorar tus recuerdos más preciados</p>
+        
+        <div class="categories-container">
+            <div class="category" data-category="familiar" onclick="openModal('familiar')">
+                <div class="category-circle familiar" id="circle-familiar"></div>
+                <span class="category-label">Familiar</span>
+            </div>
+            
+            <div class="category" data-category="personal" onclick="openModal('personal')">
+                <div class="category-circle personal" id="circle-personal"></div>
+                <span class="category-label">Personal</span>
+            </div>
+            
+            <div class="category" data-category="viajes" onclick="openModal('viajes')">
+                <div class="category-circle viajes" id="circle-viajes"></div>
+                <span class="category-label">Viajes</span>
+            </div>
+            
+            <div class="category" data-category="amigos" onclick="openModal('amigos')">
+                <div class="category-circle amigos" id="circle-amigos"></div>
+                <span class="category-label">Amigos</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENÚ DE CONFIGURACIÓN -->
+    <div class="config-menu hidden" id="configMenu">
+        <button class="config-button" onclick="toggleConfigMenu()">
+            <div class="config-line"></div>
+            <div class="config-line"></div>
+            <div class="config-line"></div>
+        </button>
+        
+        <div class="config-dropdown" id="configDropdown">
+            <div class="config-option" onclick="openGallery()">
+                <span class="config-icon">🖼️</span>
+                <span>Cambiar fondos desde galería</span>
+            </div>
+            <div class="config-option" onclick="uploadCustomImage()">
+                <span class="config-icon">📸</span>
+                <span>Subir imagen personalizada</span>
+            </div>
+            <div class="config-option" onclick="resetBackgrounds()">
+                <span class="config-icon">🔄</span>
+                <span>Restaurar fondos originales</span>
+            </div>
+            <div class="config-option" onclick="goToHome()">
+                <span class="config-icon">🏠</span>
+                <span>Volver al inicio</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALERÍA DE FONDOS -->
+    <div class="gallery-modal hidden" id="galleryModal">
+        <div class="gallery-content">
+            <h3 class="gallery-title">Selecciona una imagen para <span id="selectedCategory"></span></h3>
+            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="gallery-buttons">
+                <button class="gallery-btn primary" onclick="applySelectedImage()">Aplicar</button>
+                <button class="gallery-btn secondary" onclick="closeGallery()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EXPANSIÓN -->
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <div class="modal-circle" id="modalCircle"></div>
+            <div class="modal-quote" id="modalQuote"></div>
+            <div class="modal-author" id="modalAuthor"></div>
+            <button class="modal-enter-btn" onclick="enterCategory()">Explorar</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA DE GALERÍA DE FOTOS -->
+    <div class="gallery-page hidden" id="galleryPage">
+        <div class="gallery-header">
+            <button class="home-icon" onclick="goToCategories()" title="Volver al menú principal">
+                ←
+            </button>
+            <h1 class="gallery-page-title" id="galleryPageTitle">FAMILIAR</h1>
+        </div>
+        
+        <div class="photos-grid" id="photosGrid">
+            <div class="add-photo-card" onclick="addNewPhoto()">
+                <div class="add-photo-icon">+</div>
+                <span class="add-photo-text">Agregar Foto</span>
+            </div>
+        </div>
+        
+        <div class="gallery-navigation">
+            <button class="nav-btn" id="prevBtn" onclick="previousPage()" disabled>
+                ← Anterior
+            </button>
+            <span class="page-info" id="pageInfo">Página 1 de 1</span>
+            <button class="nav-btn" id="nextBtn" onclick="nextPage()" disabled>
+                Siguiente →
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE FOTO -->
+    <div class="photo-edit-modal hidden" id="photoEditModal">
+        <div class="photo-edit-content">
+            <h2 class="edit-title">Editar Fotografía</h2>
+            <div class="edit-layout">
+                <div class="edit-photo-preview">
+                    <img id="editPhotoPreview" src="/placeholder.svg" alt="Vista previa">
+                </div>
+                <div class="edit-form">
+                    <div class="edit-field">
+                        <label for="photoDate">Fecha</label>
+                        <input type="date" id="photoDate" class="edit-input">
+                    </div>
+                    <div class="edit-field">
+                        <label for="photoDescription">Descripción</label>
+                        <textarea id="photoDescription" class="edit-textarea" placeholder="Escribe una descripción para esta fotografía..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="edit-buttons">
+                <button class="edit-btn cancel" onclick="cancelPhotoEdit()">Cancelar</button>
+                <button class="edit-btn save" onclick="savePhoto()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE VISUALIZACIÓN DE FOTO -->
+    <div class="photo-view-modal hidden" id="photoViewModal">
+        <div class="photo-view-overlay" onclick="closePhotoView()"></div>
+        <div class="photo-view-content">
+            <button class="close-photo-view" onclick="closePhotoView()">×</button>
+            <img id="viewPhotoImage" src="/placeholder.svg" alt="Foto">
+            <div class="photo-info">
+                <div class="photo-date" id="viewPhotoDate"></div>
+                <div class="photo-description" id="viewPhotoDescription"></div>
+                <div class="photo-actions">
+                    <button class="photo-action-btn delete" onclick="confirmDeletePhoto()">
+                        🗑️ Eliminar
+                    </button>
+                    <button class="photo-action-btn edit" onclick="editExistingPhoto()">
+                        ✏️ Editar
+                    </button>
+                    <button class="photo-action-btn share" onclick="sharePhoto()">
+                        📱 Compartir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE COMPARTIR -->
+    <div class="share-modal hidden" id="shareModal">
+        <div class="share-content">
+            <h3 class="share-title">Compartir Fotografía</h3>
+            <div class="share-link-container" id="shareLinkContainer">
+                <!-- El link se generará aquí -->
+            </div>
+            <div class="share-buttons">
+                <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+                    📱 WhatsApp
+                </button>
+                <button class="share-btn copy" onclick="copyShareLink()">
+                    📋 Copiar Link
+                </button>
+                <button class="share-btn close" onclick="closeShareModal()">
+                    ✖️ Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT DE ARCHIVO OCULTO -->
+    <input type="file" class="file-input" id="fileInput" accept="image/*">
+
+    <!-- APARTADO LEGAL -->
+    <div class="legal-footer">
+        <div class="legal-content">
+            <div class="legal-title">Información Legal</div>
+            <p><strong>Desarrollador:</strong> Daniel Bedoya López</p>
+            <p><strong>Fecha de creación:</strong> 4 de Junio de 2025</p>
+            <p><strong>Versión:</strong> 1.0.0</p>
+            <p>© 2025 Snapshot Elegante. Todos los derechos reservados.</p>
+            
+            <div class="legal-links">
+                <a href="#" class="legal-link" onclick="showPrivacyPolicy()">Política de Privacidad</a>
+                <a href="#" class="legal-link" onclick="showTerms()">Términos de Uso</a>
+                <a href="#" class="legal-link" onclick="showContact()">Contacto</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        let currentEditingCategory = null;
+        let currentCategory = null;
+        let selectedGalleryImage = null;
+
+        // Frases filosóficas por categoría
+        const quotes = {
+            familiar: {
+                quote: "La familia no es algo importante. Lo es todo.",
+                author: "Michael J. Fox"
+            },
+            personal: {
+                quote: "Conócete a ti mismo y conocerás el universo y a los dioses.",
+                author: "Sócrates"
+            },
+            viajes: {
+                quote: "Viajar es la única cosa que compras que te hace más rico.",
+                author: "Proverbio"
+            },
+            amigos: {
+                quote: "Un amigo es alguien que te conoce tal como eres, comprende dónde has estado, acepta lo que te has convertido y aún así, te permite crecer.",
+                author: "William Shakespeare"
+            }
+        };
+
+        // Galería de imágenes predefinidas
+        const galleryImages = [
+            '/placeholder.svg?height=150&width=150&text=Familia1',
+            '/placeholder.svg?height=150&width=150&text=Familia2',
+            '/placeholder.svg?height=150&width=150&text=Personal1',
+            '/placeholder.svg?height=150&width=150&text=Personal2',
+            '/placeholder.svg?height=150&width=150&text=Viajes1',
+            '/placeholder.svg?height=150&width=150&text=Viajes2',
+            '/placeholder.svg?height=150&width=150&text=Amigos1',
+            '/placeholder.svg?height=150&width=150&text=Amigos2',
+            '/placeholder.svg?height=150&width=150&text=Naturaleza1',
+            '/placeholder.svg?height=150&width=150&text=Naturaleza2',
+            '/placeholder.svg?height=150&width=150&text=Abstracto1',
+            '/placeholder.svg?height=150&width=150&text=Abstracto2'
+        ];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedBackgrounds();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Subida de archivos
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+            // Cerrar modales al hacer clic fuera
+            document.getElementById('modalOverlay').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            document.getElementById('galleryModal').addEventListener('click', function(e) {
+                if (e.target === this) closeGallery();
+            });
+
+            // Cerrar menú de configuración al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                const configMenu = document.querySelector('.config-menu');
+                if (configMenu && !configMenu.contains(e.target)) {
+                    document.getElementById('configDropdown').classList.remove('active');
+                }
+            });
+        }
+
+        // Navegar a categorías
+        function goToCategories() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('categoriesPage').classList.remove('hidden');
+            document.getElementById('configMenu').classList.remove('hidden');
+        }
+
+        // Volver al inicio
+        function goToHome() {
+            document.getElementById('categoriesPage').classList.add('hidden');
+            document.getElementById('configMenu').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('configDropdown').classList.remove('active');
+        }
+
+        // Toggle del menú de configuración
+        function toggleConfigMenu() {
+            const dropdown = document.getElementById('configDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Abrir galería
+        function openGallery() {
+            if (!currentEditingCategory) {
+                showNotification('Primero selecciona una categoría', 'info');
+                document.getElementById('configDropdown').classList.remove('active');
+                
+                const categories = document.querySelectorAll('.category');
+                categories.forEach(category => {
+                    category.addEventListener('click', selectCategoryForGallery);
+                    category.style.cursor = 'pointer';
+                    category.style.opacity = '0.7';
+                });
+                return;
+            }
+            
+            document.getElementById('selectedCategory').textContent = currentEditingCategory.toUpperCase();
+            loadGalleryImages();
+            document.getElementById('galleryModal').classList.remove('hidden');
+            document.getElementById('configDropdown').classList.remove('active');
+        }
+
+        function selectCategoryForGallery(e) {
+            e.stopPropagation();
+            currentEditingCategory = this.dataset.category;
+            
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.removeEventListener('click', selectCategoryForGallery);
+                cat.style.cursor = 'pointer';
+                cat.style.opacity = '1';
+            });
+            
+            openGallery();
+        }
+
+        // Cargar imágenes en la galería
+        function loadGalleryImages() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryGrid.innerHTML = '';
+            
+            galleryImages.forEach((imageSrc, index) => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'gallery-item';
+                imageDiv.style.backgroundImage = `url(${imageSrc})`;
+                imageDiv.onclick = () => selectGalleryImage(imageSrc, imageDiv);
+                galleryGrid.appendChild(imageDiv);
+            });
+        }
+
+        // Seleccionar imagen de la galería
+        function selectGalleryImage(imageSrc, element) {
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedGalleryImage = imageSrc;
+        }
+
+        // Aplicar imagen seleccionada
+        function applySelectedImage() {
+            if (!selectedGalleryImage || !currentEditingCategory) {
+                showNotification('Por favor, selecciona una imagen', 'error');
+                return;
+            }
+            
+            const circle = document.getElementById(`circle-${currentEditingCategory}`);
+            circle.style.backgroundImage = `url(${selectedGalleryImage})`;
+            
+            // Guardar en localStorage
+            localStorage.setItem(`elegant_bg-${currentEditingCategory}`, selectedGalleryImage);
+            
+            closeGallery();
+            showNotification('Fondo actualizado correctamente', 'success');
+        }
+
+        // Cerrar galería
+        function closeGallery() {
+            document.getElementById('galleryModal').classList.add('hidden');
+            selectedGalleryImage = null;
+            currentEditingCategory = null;
+        }
+
+        // Subir imagen personalizada
+        function uploadCustomImage() {
+            showNotification('Selecciona una categoría para cambiar su fondo', 'info');
+            document.getElementById('configDropdown').classList.remove('active');
+            
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                category.addEventListener('click', handleCustomImageClick);
+                category.style.cursor = 'pointer';
+                category.style.opacity = '0.7';
+            });
+        }
+
+        function handleCustomImageClick(e) {
+            e.stopPropagation();
+            currentEditingCategory = this.dataset.category;
+            
+            document.getElementById('fileInput').click();
+            
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.removeEventListener('click', handleCustomImageClick);
+                cat.style.cursor = 'pointer';
+                cat.style.opacity = '1';
+            });
+        }
+
+        // Manejar subida de archivo
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file || !currentEditingCategory) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const circle = document.getElementById(`circle-${currentEditingCategory}`);
+                circle.style.backgroundImage = `url(${e.target.result})`;
+                
+                // Guardar en localStorage
+                localStorage.setItem(`elegant_bg-${currentEditingCategory}`, e.target.result);
+                
+                showNotification('Imagen subida exitosamente', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Restaurar fondos originales
+        function resetBackgrounds() {
+            const categories = ['familiar', 'personal', 'viajes', 'amigos'];
+            categories.forEach(cat => {
+                const circle = document.getElementById(`circle-${cat}`);
+                circle.style.backgroundImage = '';
+                localStorage.removeItem(`elegant_bg-${cat}`);
+            });
+            
+            document.getElementById('configDropdown').classList.remove('active');
+            showNotification('Fondos restaurados', 'success');
+        }
+
+        // Cargar fondos guardados
+        function loadSavedBackgrounds() {
+            const categories = ['familiar', 'personal', 'viajes', 'amigos'];
+            categories.forEach(cat => {
+                const savedBg = localStorage.getItem(`elegant_bg-${cat}`);
+                if (savedBg) {
+                    const circle = document.getElementById(`circle-${cat}`);
+                    circle.style.backgroundImage = `url(${savedBg})`;
+                }
+            });
+        }
+
+        // Abrir modal de categoría
+        function openModal(category) {
+            currentCategory = category;
+            const modal = document.getElementById('modalOverlay');
+            const modalCircle = document.getElementById('modalCircle');
+            const modalQuote = document.getElementById('modalQuote');
+            const modalAuthor = document.getElementById('modalAuthor');
+            
+            const originalCircle = document.getElementById(`circle-${category}`);
+            const computedStyle = window.getComputedStyle(originalCircle);
+            modalCircle.style.backgroundColor = computedStyle.backgroundColor;
+            modalCircle.style.backgroundImage = computedStyle.backgroundImage;
+            modalCircle.style.backgroundSize = 'cover';
+            modalCircle.style.backgroundPosition = 'center';
+            
+            modalQuote.textContent = `"${quotes[category].quote}"`;
+            modalAuthor.textContent = `— ${quotes[category].author}`;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.add('hidden');
+        }
+
+        // Variables para la galería de fotos
+        let currentGalleryCategory = null;
+        let currentPhotoIndex = null;
+        let photosPerPage = 9; // 9 fotos + 1 botón de agregar = 10 elementos por página
+        let currentPage = 1;
+        let editingPhotoId = null;
+        let currentShareLink = null;
+
+        // Función para entrar a una categoría específica
+        function enterCategory() {
+            if (!currentCategory) return;
+
+            currentGalleryCategory = currentCategory;
+            document.getElementById('modalOverlay').classList.add('hidden');
+            document.getElementById('categoriesPage').classList.add('hidden');
+            document.getElementById('configMenu').classList.add('hidden');
+            document.getElementById('galleryPage').classList.remove('hidden');
+
+            // Actualizar título de la galería
+            document.getElementById('galleryPageTitle').textContent = currentCategory.toUpperCase();
+
+            // Cargar fotos de la categoría
+            loadCategoryPhotos();
+        }
+
+        // Cargar fotos de una categoría
+        function loadCategoryPhotos() {
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            renderPhotosGrid(photos);
+            updatePagination(photos.length);
+        }
+
+        // Obtener fotos del localStorage
+        function getPhotosFromStorage(category) {
+            const stored = localStorage.getItem(`elegant_photos_${category}`);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Guardar fotos en localStorage
+        function savePhotosToStorage(category, photos) {
+            localStorage.setItem(`elegant_photos_${category}`, JSON.stringify(photos));
+        }
+
+        // Renderizar la cuadrícula de fotos
+        function renderPhotosGrid(photos) {
+            const grid = document.getElementById('photosGrid');
+            grid.innerHTML = '';
+
+            // Agregar botón de añadir foto
+            const addCard = document.createElement('div');
+            addCard.className = 'add-photo-card';
+            addCard.onclick = addNewPhoto;
+            addCard.innerHTML = `
+                <div class="add-photo-icon">+</div>
+                <span class="add-photo-text">Agregar Foto</span>
+            `;
+            grid.appendChild(addCard);
+
+            // Calcular fotos para la página actual
+            const startIndex = (currentPage - 1) * photosPerPage;
+            const endIndex = startIndex + photosPerPage;
+            const photosToShow = photos.slice(startIndex, endIndex);
+
+            // Agregar fotos
+            photosToShow.forEach((photo, index) => {
+                const photoCard = document.createElement('div');
+                photoCard.className = 'photo-card';
+                photoCard.onclick = () => viewPhoto(startIndex + index);
+                
+                photoCard.innerHTML = `
+                    <img src="${photo.src}" alt="Foto ${index + 1}">
+                    <button class="photo-card-delete" onclick="event.stopPropagation(); quickDeletePhoto(${startIndex + index})" title="Eliminar foto">
+                        ×
+                    </button>
+                    <div class="photo-card-overlay">
+                        <div class="photo-card-date">${formatDate(photo.date)}</div>
+                        ${photo.description ? `<div class="photo-card-description">${photo.description}</div>` : ''}
+                    </div>
+                `;
+                
+                grid.appendChild(photoCard);
+            });
+        }
+
+        // Eliminar foto rápidamente desde la tarjeta
+        function quickDeletePhoto(index) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta foto?')) {
+                const photos = getPhotosFromStorage(currentGalleryCategory);
+                photos.splice(index, 1);
+                savePhotosToStorage(currentGalleryCategory, photos);
+                loadCategoryPhotos();
+                showNotification('Foto eliminada', 'success');
+            }
+        }
+
+        // Agregar nueva foto
+        function addNewPhoto() {
+            document.getElementById('fileInput').click();
+
+            // Remover listener anterior si existe
+            document.getElementById('fileInput').removeEventListener('change', handlePhotoUpload);
+
+            // Agregar nuevo listener
+            document.getElementById('fileInput').addEventListener('change', handlePhotoUpload);
+        }
+
+        // Manejar subida de foto para galería
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // Mostrar modal de edición
+                document.getElementById('editPhotoPreview').src = e.target.result;
+                document.getElementById('photoDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('photoDescription').value = '';
+                document.getElementById('photoEditModal').classList.remove('hidden');
+                
+                // Guardar datos temporales
+                window.tempPhotoData = {
+                    src: e.target.result,
+                    isNew: true
+                };
+            };
+            reader.readAsDataURL(file);
+
+            // Limpiar input
+            e.target.value = '';
+        }
+
+        // Guardar foto
+        function savePhoto() {
+            const date = document.getElementById('photoDate').value;
+            const description = document.getElementById('photoDescription').value;
+
+            if (!date) {
+                showNotification('Por favor, selecciona una fecha', 'error');
+                return;
+            }
+
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+
+            if (window.tempPhotoData && window.tempPhotoData.isNew) {
+                // Nueva foto
+                const newPhoto = {
+                    id: Date.now(),
+                    src: window.tempPhotoData.src,
+                    date: date,
+                    description: description,
+                    createdAt: new Date().toISOString()
+                };
+                
+                photos.push(newPhoto);
+            } else if (editingPhotoId !== null) {
+                // Editar foto existente
+                const photoIndex = photos.findIndex(p => p.id === editingPhotoId);
+                if (photoIndex !== -1) {
+                    photos[photoIndex].date = date;
+                    photos[photoIndex].description = description;
+                }
+            }
+
+            savePhotosToStorage(currentGalleryCategory, photos);
+            loadCategoryPhotos();
+            cancelPhotoEdit();
+
+            showNotification('Foto guardada exitosamente', 'success');
+        }
+
+        // Cancelar edición de foto
+        function cancelPhotoEdit() {
+            document.getElementById('photoEditModal').classList.add('hidden');
+            window.tempPhotoData = null;
+            editingPhotoId = null;
+        }
+
+        // Ver foto en grande con animación de flores
+        function viewPhoto(index) {
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            const startIndex = (currentPage - 1) * photosPerPage;
+            const photo = photos[startIndex + index];
+
+            if (!photo) return;
+
+            currentPhotoIndex = startIndex + index;
+
+            document.getElementById('viewPhotoImage').src = photo.src;
+            document.getElementById('viewPhotoDate').textContent = formatDate(photo.date);
+            document.getElementById('viewPhotoDescription').textContent = photo.description || 'Sin descripción';
+            document.getElementById('photoViewModal').classList.remove('hidden');
+
+            // Crear animación de flores
+            createFlowerAnimation();
+        }
+
+        // Crear animación de flores en las esquinas
+        function createFlowerAnimation() {
+            const modal = document.getElementById('photoViewModal');
+            const flowerContainer = document.createElement('div');
+            flowerContainer.className = 'flower-animation';
+
+            const flowers = ['🌸', '🌺', '🌻', '🌷', '🌹', '🌼', '✨', '💫', '⭐'];
+            const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+
+            positions.forEach((position, index) => {
+                const flower = document.createElement('div');
+                flower.className = `flower ${position}`;
+                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                flowerContainer.appendChild(flower);
+            });
+
+            modal.appendChild(flowerContainer);
+
+            // Remover animación después de 4 segundos
+            setTimeout(() => {
+                if (modal.contains(flowerContainer)) {
+                    modal.removeChild(flowerContainer);
+                }
+            }, 4000);
+        }
+
+        // Cerrar vista de foto
+        function closePhotoView() {
+            document.getElementById('photoViewModal').classList.add('hidden');
+            currentPhotoIndex = null;
+
+            // Limpiar animaciones de flores
+            const flowerAnimations = document.querySelectorAll('.flower-animation');
+            flowerAnimations.forEach(animation => {
+                animation.remove();
+            });
+        }
+
+        // Editar foto existente
+        function editExistingPhoto() {
+            if (currentPhotoIndex === null) return;
+
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            const photo = photos[currentPhotoIndex];
+
+            editingPhotoId = photo.id;
+
+            document.getElementById('editPhotoPreview').src = photo.src;
+            document.getElementById('photoDate').value = photo.date;
+            document.getElementById('photoDescription').value = photo.description || '';
+
+            closePhotoView();
+            document.getElementById('photoEditModal').classList.remove('hidden');
+        }
+
+        // Confirmar eliminación de foto
+        function confirmDeletePhoto() {
+            if (currentPhotoIndex === null) return;
+
+            if (confirm('¿Estás seguro de que quieres eliminar esta foto?')) {
+                deletePhoto();
+            }
+        }
+
+        // Eliminar foto
+        function deletePhoto() {
+            if (currentPhotoIndex === null) return;
+
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            photos.splice(currentPhotoIndex, 1);
+            savePhotosToStorage(currentGalleryCategory, photos);
+
+            closePhotoView();
+            loadCategoryPhotos();
+
+            showNotification('Foto eliminada', 'success');
+        }
+
+        // Compartir foto
+        function sharePhoto() {
+            if (currentPhotoIndex === null) return;
+
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            const photo = photos[currentPhotoIndex];
+
+            // Generar link único para compartir
+            const shareId = generateShareId();
+            const shareData = {
+                id: shareId,
+                photo: photo,
+                category: currentGalleryCategory,
+                sharedAt: new Date().toISOString()
+            };
+
+            // Guardar datos de compartir
+            localStorage.setItem(`elegant_share_${shareId}`, JSON.stringify(shareData));
+
+            // Generar URL de compartir
+            const baseUrl = window.location.origin + window.location.pathname;
+            currentShareLink = `${baseUrl}?share=${shareId}`;
+
+            // Mostrar modal de compartir
+            document.getElementById('shareLinkContainer').textContent = currentShareLink;
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        // Generar ID único para compartir
+        function generateShareId() {
+            return 'snap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Compartir por WhatsApp
+        function shareToWhatsApp() {
+            if (!currentShareLink) return;
+
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            const photo = photos[currentPhotoIndex];
+
+            const message = `¡Mira esta foto de mi álbum ${currentGalleryCategory.toUpperCase()}! 📸\n\n` +
+                           `Fecha: ${formatDate(photo.date)}\n` +
+                           `${photo.description ? `Descripción: ${photo.description}\n` : ''}` +
+                           `\nVer foto: ${currentShareLink}`;
+
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Copiar link de compartir
+        function copyShareLink() {
+            if (!currentShareLink) return;
+
+            navigator.clipboard.writeText(currentShareLink).then(() => {
+                showNotification('Link copiado al portapapeles', 'success');
+            }).catch(() => {
+                // Fallback para navegadores que no soportan clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = currentShareLink;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Link copiado al portapapeles', 'success');
+            });
+        }
+
+        // Cerrar modal de compartir
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+            currentShareLink = null;
+        }
+
+        // Verificar si hay un link compartido al cargar la página
+        function checkSharedPhoto() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shareId = urlParams.get('share');
+
+            if (shareId) {
+                const shareData = localStorage.getItem(`elegant_share_${shareId}`);
+                if (shareData) {
+                    const data = JSON.parse(shareData);
+                    showSharedPhoto(data);
+                } else {
+                    showNotification('El link compartido no es válido o ha expirado', 'error');
+                }
+            }
+        }
+
+        // Mostrar foto compartida
+        function showSharedPhoto(shareData) {
+            const { photo, category } = shareData;
+
+            // Ir directamente a la vista de foto
+            document.getElementById('viewPhotoImage').src = photo.src;
+            document.getElementById('viewPhotoDate').textContent = formatDate(photo.date);
+            document.getElementById('viewPhotoDescription').textContent = photo.description || 'Sin descripción';
+
+            // Ocultar botones de edición y eliminación para fotos compartidas
+            const actions = document.querySelector('.photo-actions');
+            actions.innerHTML = `
+                <button class="photo-action-btn" onclick="closePhotoView()">
+                    ✖️ Cerrar
+                </button>
+            `;
+
+            document.getElementById('photoViewModal').classList.remove('hidden');
+            createFlowerAnimation();
+
+            showNotification(`Viendo foto compartida de ${category.toUpperCase()}`, 'info');
+        }
+
+        // Formatear fecha
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Navegación de páginas
+        function updatePagination(totalPhotos) {
+            const totalPages = Math.ceil(totalPhotos / photosPerPage);
+
+            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${Math.max(1, totalPages)}`;
+            document.getElementById('prevBtn').disabled = currentPage <= 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages || totalPages <= 1;
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadCategoryPhotos();
+            }
+        }
+
+        function nextPage() {
+            const photos = getPhotosFromStorage(currentGalleryCategory);
+            const totalPages = Math.ceil(photos.length / photosPerPage);
+
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadCategoryPhotos();
+            }
+        }
+
+        // Modificar la función goToCategories para resetear la página
+        function goToCategories() {
+            document.getElementById('galleryPage').classList.add('hidden');
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('categoriesPage').classList.remove('hidden');
+            document.getElementById('configMenu').classList.remove('hidden');
+
+            // Resetear variables de galería
+            currentGalleryCategory = null;
+            currentPage = 1;
+        }
+
+        // Mostrar notificaciones
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+            
+            notification.innerHTML = `
+                <span class="notification-icon">${icon}</span>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Funciones del apartado legal
+        function showPrivacyPolicy() {
+            alert('Política de Privacidad:\n\nEsta aplicación respeta tu privacidad. Las imágenes se almacenan localmente en tu navegador y no se comparten con terceros.');
+        }
+
+        function showTerms() {
+            alert('Términos de Uso:\n\nAl usar esta aplicación, aceptas que es para fines personales y privados.');
+        }
+
+        function showContact() {
+            alert('Contacto:\n\nDesarrollador: Daniel Bedoya López\nEmail: danielbedoyalopez5@gmail.com\nTeléfono: +573189944100');
+        }
+
+        // Verificar foto compartida al cargar la página
+        window.addEventListener('load', () => {
+            checkSharedPhoto();
+        });
+    </script>
+</body>
+</html>
